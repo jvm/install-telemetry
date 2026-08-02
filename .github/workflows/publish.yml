@@ -37,7 +37,8 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          test "${RELEASE_TAG#v}" = "$(node -p \"require('./package.json').version\")"
+          package_version="$(node -p "require('./package.json').version")"
+          test "${RELEASE_TAG#v}" = "$package_version"
 
       - name: Typecheck
         run: npm run check
