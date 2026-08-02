@@ -1,5 +1,5 @@
 import { strict as assert } from "node:assert";
-import { mkdtemp, readFile, readdir, rm, stat, utimes, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, utimes, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
@@ -89,6 +89,22 @@ test("serializes concurrent reports", async () => {
     releaseRequest();
     await Promise.all([first, second]);
     assert.deepEqual(JSON.parse(await readFile(statePath, "utf8")), { lastReportedVersion: "1.2.3" });
+  });
+});
+
+test("cleans temporary and lock files when state replacement fails", async () => {
+  await withState(async (statePath) => {
+    await mkdir(statePath);
+
+    await reportInstallTelemetry({
+      endpoint,
+      tool: "my-tool",
+      version: "1.2.3",
+      statePath,
+      fetch: successfulFetch([]),
+    });
+
+    assert.deepEqual((await readdir(dirname(statePath))).sort(), ["install-telemetry.json"]);
   });
 });
 
