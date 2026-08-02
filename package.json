@@ -1,0 +1,54 @@
+{
+  "name": "@mocito/install-telemetry",
+  "version": "0.1.0",
+  "description": "Best-effort, once-per-version install telemetry for Node.js tools.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Jose Mocito",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvm/install-telemetry.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jvm/install-telemetry/issues"
+  },
+  "homepage": "https://github.com/jvm/install-telemetry#readme",
+  "keywords": [
+    "install-telemetry",
+    "telemetry",
+    "node",
+    "privacy"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "pack:dry-run": "npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}
