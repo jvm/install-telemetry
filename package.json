@@ -36,6 +36,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "prepack": "npm run build",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test test/*.test.mjs",
