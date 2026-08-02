@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
-import { mkdtemp, readFile, rm, stat, utimes, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, stat, utimes, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import test from "node:test";
 import { reportInstallTelemetry } from "../dist/index.js";
 
@@ -39,6 +39,7 @@ test("reports a version once and persists only after success", async () => {
     assert.equal(calls[0].url.searchParams.get("version"), "1.2.3");
     assert.match(calls[0].init.headers["User-Agent"], /^my-tool\/1\.2\.3 \(/);
     assert.deepEqual(JSON.parse(await readFile(statePath, "utf8")), { lastReportedVersion: "1.2.3" });
+    assert.deepEqual((await readdir(dirname(statePath))).sort(), ["install-telemetry.json"]);
   });
 });
 

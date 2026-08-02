@@ -1,6 +1,6 @@
 {
   "name": "@mocito/install-telemetry",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Best-effort, once-per-version install telemetry for Node.js tools.",
   "type": "module",
   "license": "MIT",
