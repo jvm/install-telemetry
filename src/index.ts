@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 const REPORT_INSTALL_TIMEOUT_MS = 5000;
@@ -95,6 +95,20 @@ async function releaseLock(lockPath: string, token: string): Promise<void> {
   }
 }
 
+async function writeState(statePath: string, version: string): Promise<void> {
+  const temporaryPath = `${statePath}.${randomUUID()}.tmp`;
+  try {
+    await writeFile(
+      temporaryPath,
+      `${JSON.stringify({ lastReportedVersion: version }, null, 2)}\n`,
+      { encoding: "utf8", flag: "wx", mode: 0o600 },
+    );
+    await rename(temporaryPath, statePath);
+  } finally {
+    await rm(temporaryPath, { force: true });
+  }
+}
+
 /**
  * Reports one successful install/update per tool version.
  *
@@ -130,11 +144,7 @@ export async function reportInstallTelemetry(options: InstallTelemetryOptions): 
       });
       if (!response.ok) return;
 
-      await writeFile(
-        statePath,
-        `${JSON.stringify({ lastReportedVersion: options.version }, null, 2)}\n`,
-        { encoding: "utf8", mode: 0o600 },
-      );
+      await writeState(statePath, options.version);
     } finally {
       await releaseLock(lockPath, token);
     }

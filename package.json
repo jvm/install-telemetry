@@ -1,6 +1,6 @@
 {
   "name": "@mocito/install-telemetry",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Best-effort, once-per-version install telemetry for Node.js tools.",
   "type": "module",
   "license": "MIT",
@@ -36,6 +36,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "prepack": "npm run build",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test test/*.test.mjs",
@@ -48,7 +49,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^22.15.0",
+    "@types/node": "^26.1.1",
     "typescript": "^7.0.2"
   }
 }
